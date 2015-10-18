@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+blog_dir = "/Users/0oneo/Project/0oneo.me"
+
+Dir.chdir blog_dir
+
+blog_name = ARGV[0]
+
+new_post = "bundle exec \"rake new_post['#{blog_name}']\""
+
+new_post_result = `#{new_post}`
+
+puts "#{new_post_result}"
+
+blog_name_pattern = Regexp.new("source.+\.markdown", Regexp::EXTENDED)
+blog_name = new_post_result[blog_name_pattern]
+
+open_it_with_byword = "open #{blog_name} -a byword"
+
+# puts blog name with full path
+
+full_path = blog_dir + "/" + blog_name
+IO.popen('pbcopy', 'w') { |f| f << full_path }
+puts "blog full path: #{full_path}"
+
+# call it to open byword
+
+puts "open #{blog_name} with byword"
+
+`#{open_it_with_byword}`
