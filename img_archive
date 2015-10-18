@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+
+def changeName(param)
+  result = param.gsub ' ', '_'
+  result.downcase!
+  result + '.png'
+end
+
+# get screen capture file
+home_dir = ENV['HOME'] + '/Desktop/'
+screen_captures = Dir[home_dir + 'Screen Shot*.png']
+if screen_captures.length != 1
+  puts "too many screen capture files: #{screen_captures}"
+  exit -1
+end
+screen_capture = screen_captures[0]
+
+
+# =================================
+
+# check current dir whether it is the ImageArchive
+remote_name = 'git@github.com:0oneo/ImageArchive.git'
+local_remote_name = `git config --get remote.origin.url`.chomp!
+
+if remote_name != local_remote_name
+  puts 'sorry current directory not the right git directory'
+  exit -1
+end
+
+# get current dir
+current_dir = Dir.pwd
+
+# get new name
+new_name = current_dir + '/' + changeName(ARGV[0])
+
+
+# ==================================
+
+# mv capture file to current dir
+`mv "#{screen_capture}" "#{new_name}"`
+
+# check where mv file success
+if File.exists?(new_name) == false
+  puts "mv file failed"
+  exit -1
+end
+
+puts "mv: succeed!"
+
+
+# ==================================
+
+# check if has git changes
+git_changes = `git status -s`
+if git_changes == ''
+  puts 'git: has no changes'
+  exit -1
+end
+
+# add, commit, push the change
+`git add .`
+
+puts 'git: add succeed!'
+
+`git commit -m "#{ARGV[0]}"`
+
+puts 'git: commit succeed!'
+
+`git push`
+puts 'git: push succeed!'
+
+
+# =================================
+
+# echo the result image url
+repo_root_dir = `git rev-parse --show-toplevel`.chomp! + '/'
+relative_name = new_name.gsub repo_root_dir, ''
+
+base_url = 'https://raw.githubusercontent.com/0oneo/ImageArchive/master/'
+image_url = base_url + relative_name
+
+puts "image url: #{image_url}"
+
+# validate the image url
+status_header = `curl -I #{image_url}`.lines.first
+status = status_header.split(' ')[1]
+
+if status != '200'
+  puts "something wrong when getting the img"
+  exit -1
+end
+
+puts 'curl: check file succeed!'
+
+
+# =================================
+
+# copy the result to pasteboard
+html_img = "<img src=#{image_url} width=80% />"
+IO.popen('pbcopy', 'w') { |f| f << html_img}
+
+puts 'html: generate img tag succeed! check pasteboard!'
+
+puts 'all succeed!'
+
+exit 0
