@@ -33,6 +33,13 @@ current_dir = Dir.pwd
 # get new name
 new_name = current_dir + '/' + changeName(ARGV[0])
 
+# check whether file already exists
+
+if File.exists? new_name
+  puts "mv: failed, sorry file #{new_name} already exists!"
+  exit -1
+end
+
 
 # ==================================
 
