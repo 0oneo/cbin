@@ -1,6 +1,73 @@
 #!/usr/bin/env ruby
 
-Dir.chdir "/Users/0oneo/Project/0oneo.me"
+
+# check if has any changes
+
+def check_repo_has_change
+  git_changes = `git status -s`
+  result = git_changes != ''
+  result
+end
+
+
+Dir.chdir '/Users/0oneo/Project/0oneo.me'
+
+
+# check whether has any change
+if check_repo_has_change
+  # make sure only have one file changed
+  git_status_summery = `git status -s`.chomp!
+  if git_status_summery.lines.length > 1
+    puts "git: too many changed files"
+    exit -1
+  end
+
+
+  # check change type
+  change_type = git_status_summery.split(' ')[0]
+  change_file_path = git_status_summery.split(' ')[1]
+
+  commit_message = ''
+
+  if change_type == 'M'
+    commit_message = 'revision to '
+    puts 'change old post'
+  else
+    puts 'add new post'
+  end
+
+
+  # get blog title
+  contents = File.open(change_file_path, 'rb').read
+  title = contents.lines[2][/.*: "(.*)"\n/, 1]
+
+  if title == nil || title == ''
+    puts 'blog: title is empty'
+    exit -1
+  end
+
+  puts "blog title: #{title}"
+
+  # commit the change
+  commit_message += title
+
+  `git add .`
+
+  puts 'git add succeed!'
+
+
+  `git commit -m "#{commit_message}"`
+
+  puts 'git commit succeed!'
+
+  # push the change
+  `git push`
+
+  puts "git push succeed!"
+end
+
+
+# Jekyll related operations
 
 `bundle exec "rake generate"`
 
