@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+Dir.chdir "/Users/0oneo/Project/0oneo.me"
+
+`bundle exec "rake generate"`
+
+`bundle exec "rake deploy --trace"`
