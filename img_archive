@@ -106,6 +106,8 @@ puts 'curl: check file succeed!'
 html_img = "<img src=\"#{image_url}\" width=80% />"
 IO.popen('pbcopy', 'w') { |f| f << html_img}
 
+puts "img: #{html_img}"
+
 puts 'html: generate img tag succeed! check pasteboard!'
 
 puts 'all succeed!'
