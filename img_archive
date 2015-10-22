@@ -8,7 +8,7 @@ end
 
 # get screen capture file
 home_dir = ENV['HOME'] + '/Desktop/'
-screen_captures = Dir[home_dir + 'Screen Shot*.png']
+screen_captures = Dir.glob(home_dir + 'Screen Shot*.{PNG,png}')
 if screen_captures.length != 1
   puts "too many screen capture files: #{screen_captures}"
   exit -1
