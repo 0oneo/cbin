@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+`rvm use system`
 
 # check if has any changes
 
