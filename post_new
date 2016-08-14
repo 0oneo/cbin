@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-`rvm use system`
-
 blog_dir = "/Users/0oneo/Project/0oneo.me"
 
 Dir.chdir blog_dir

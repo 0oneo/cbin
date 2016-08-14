@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-`rvm use system`
-
 # check if has any changes
 
 def check_repo_has_change

@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+blog_dir = "/Users/0oneo/Project/0oneo.me"
+
+Dir.chdir blog_dir
+
+t1 = Thread.new {
+  sleep 1
+  puts "open chrome..."
+  `open 'http://localhost:4000'`
+}
+
+`bundle exec "rake preview"`
