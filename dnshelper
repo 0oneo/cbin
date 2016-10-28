@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+
+class DNSHelper < Thor
+
+  DNS_SERVER_114 = '114.114.114.114'
+  DNS_SERVER_DHCP = 'empty'
+
+  COMMAND_DNS_SET = 'networksetup -setdnsservers Wi-Fi '
+  COMMAND_DNS_GET = 'networksetup -getdnsservers Wi-Fi'
+
+  desc 'dnsinfo', 'show current dns settings for WIFI service'
+  def dnsinfo()
+    puts dns_description(`#{COMMAND_DNS_GET}`.chomp)
+
+    puts "Do you want to change DNS (yes/no): "
+    want_to_change = $stdin.gets().chomp
+    if want_to_change.start_with?('y')
+      switchdns()
+    end
+  end
+
+  desc 'switchdns', "Switch DNS bewteen #{DNS_SERVER_114} and DHCP for WIFI"
+  def switchdns()
+    current_setting = `#{COMMAND_DNS_GET}`.chomp
+    if current_setting != DNS_SERVER_114
+      cmd = COMMAND_DNS_SET + DNS_SERVER_114
+    else
+      cmd = COMMAND_DNS_SET + DNS_SERVER_DHCP
+    end
+
+    puts "current dns setting: #{dns_description(current_setting)}, changed to #{current_setting == DNS_SERVER_114 ? DNS_SERVER_DHCP : DNS_SERVER_114}"
+
+   `sudo #{cmd}`
+  end
+
+  default_task :switchdns
+
+  private
+
+    def dns_description(setting)
+      if setting == "There aren't any DNS Servers set on Wi-Fi."
+        return 'DHCP'
+      end
+      return setting
+    end
+end
+
+DNSHelper.start( ARGV )
