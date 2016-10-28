@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+filename = ARGV.first
+
+if !File.exist?(filename)
+  puts "File: #{filename} do not exists."
+  abort(-1)
+end
+
+File.rename(filename, filename.downcase.gsub(/[\s-]+/, "_"))
