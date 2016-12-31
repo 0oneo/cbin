@@ -15,7 +15,7 @@ puts "#{new_post_result}"
 blog_name_pattern = Regexp.new("source.+\.markdown", Regexp::EXTENDED)
 blog_name = new_post_result[blog_name_pattern]
 
-open_it_with_byword = "open #{blog_name} -a byword"
+open_it_with_atom = "open #{blog_name} -a atom"
 
 # puts blog name with full path
 
@@ -23,8 +23,8 @@ full_path = blog_dir + "/" + blog_name
 IO.popen('pbcopy', 'w') { |f| f << full_path }
 puts "blog full path: #{full_path}"
 
-# call it to open byword
+# call it to open atom
 
-puts "open #{blog_name} with byword"
+puts "open #{blog_name} with atom"
 
-`#{open_it_with_byword}`
+`#{open_it_with_atom}`
