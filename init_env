@@ -2,14 +2,37 @@
 
 # 创建一个所有 mac 共享的目录，类似 dropbox
 
+def desc(content)
+  puts "will " + content
+  yeild
+  puts "done " + content
+end
+
+def install_apps
+  install_on_my_zsh
+  install_brew
+end
+
+def install_on_my_zsh
+  app_name = "oh_my_zsh"
+
+  desc()
+end
+
+def install_brew
+  app_name = "brew"
+  puts "will install #{app_name}"
+  puts "done install #{app_name}"
+end
+
 def mkMacbookSharedDir
   require 'fileutils'
 
   shared_dir_name = "MacShared"
-  mac_shared_dir = "~/Library/Mobile Documents/com\~apple\~CloudDocs/" + shared_dir_name
-  shared_dir_symbol = "~/Desktop/" + shared_dir_name
+  mac_shared_dir = File.expand_path("~/Library/Mobile Documents/com\~apple\~CloudDocs/" + shared_dir_name)
+  shared_dir_symbol = File.expand_path("~/Desktop/" + shared_dir_name)
 
-  if Dir.exist?(mac_shared_dir)
+  if Dir.exist?(shared_dir_symbol)
     puts "#{shared_dir_name} is already exists in Desktop"
     return
   end
@@ -23,4 +46,9 @@ def mkMacbookSharedDir
   FileUtils::mkdir_p shared_dir_symbol
 end
 
+def disable_rm
+
+end
+
+install_apps
 mkMacbookSharedDir
