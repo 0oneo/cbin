@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# 创建一个所有 mac 共享的目录，类似 dropbox
+
+def mkMacbookSharedDir
+  require 'fileutils'
+
+  shared_dir_name = "MacShared"
+  mac_shared_dir = "~/Library/Mobile Documents/com\~apple\~CloudDocs/" + shared_dir_name
+  shared_dir_symbol = "~/Desktop/" + shared_dir_name
+
+  if Dir.exist?(mac_shared_dir)
+    puts "#{shared_dir_name} is already exists in Desktop"
+    return
+  end
+
+  if (Dir.exist?(mac_shared_dir) == false)
+    puts "create #{shared_dir_name} in iCloud Drive Directory"
+    FileUtils::mkdir_p mac_shared_dir
+  end
+
+  puts "Make a symbol link to #{shared_dir_name} in iCloud Drive"
+  FileUtils::mkdir_p shared_dir_symbol
+end
+
+mkMacbookSharedDir
