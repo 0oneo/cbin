@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# pdf a web page
+
+def print_uage()
+  puts "pdf_web $file_name $url"
+  exit
+end
+
+if ARGV.length != 2
+  print_uage
+end
+
+file_name = ARGV[0]
+url = ARGV[1]
+
+cmd = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --headless --print-to-pdf=\"#{file_name}.pdf\"  #{url}"
+%x{ #{cmd} }
